@@ -10,7 +10,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 
-class MainActivity : AppCompatActivity() {
+class NoteActivity : AppCompatActivity() {
     private val tag = "MainActivity"
     private var notePosition = POSITION_NOT_SET
 
