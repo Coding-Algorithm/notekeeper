@@ -24,8 +24,6 @@ object DataManager {
         return null
     }
 
-
-
     private fun initializeCourses(){
         var course = CourseInfo("android_intents", "Android Programming With Intents")
         courses.set(course.courseId, course)

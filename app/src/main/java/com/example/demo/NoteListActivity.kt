@@ -14,7 +14,6 @@ class NoteListActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityNoteListBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,20 +27,16 @@ class NoteListActivity : AppCompatActivity() {
             startActivity(activityIntent)
         }
 
-
-
         val listItems = findViewById<RecyclerView>(R.id.listItems)
 
         listItems.layoutManager = LinearLayoutManager(this)
-
-
-
-
-
+        listItems.adapter = NoteRecyclerAdapter(this, DataManager.notes)
     }
 
     override fun onResume() {
         super.onResume()
+        val listItems = findViewById<RecyclerView>(R.id.listItems)
 
+        listItems.adapter?.notifyDataSetChanged()
     }
 }

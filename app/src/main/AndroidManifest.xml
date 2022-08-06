@@ -10,15 +10,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Demo">
         <activity
-            android:name=".NoteListActivity"
+            android:name=".ItemsActivity"
             android:exported="true"
-            android:label="NoteKeeper"
+            android:label="@string/title_activity_items"
             android:theme="@style/Theme.Demo.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".NoteListActivity"
+            android:exported="true"
+            android:label="NoteKeeper"
+            android:theme="@style/Theme.Demo.NoActionBar">
         </activity>
         <activity
             android:name=".NoteActivity"
