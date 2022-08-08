@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.GridLayout
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.android.material.navigation.NavigationView
@@ -15,16 +16,30 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.demo.databinding.ActivityItemsBinding
 import com.google.android.material.snackbar.Snackbar
+import com.jwhh.notekeeper.CourseRecyclerAdapter
 
 class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityItemsBinding
 
+
+    private val noteLayoutManager by lazy {
+        LinearLayoutManager(this)
+     }
+    private val noteRecyclerAdapter by lazy{
+        NoteRecyclerAdapter(this, DataManager.notes)
+    }
+
+    private val courseLayoutManager by lazy{ GridLayoutManager(this, 2)}
+    private val courseRecyclerAdapter by lazy{
+        CourseRecyclerAdapter(this, DataManager.courses.values.toList())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +54,10 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
             startActivity(Intent(this, NoteActivity::class.java))
         }
 
-//        var drawer_layout = findViewById<>(R.id.drawer_layout)
-        val listItems = findViewById<RecyclerView>(R.id.listItems)
-        listItems.layoutManager = LinearLayoutManager(this)
-        listItems.adapter = NoteRecyclerAdapter(this, DataManager.notes)
+        displayNotes()
 
         var drawer_layout: DrawerLayout = findViewById(R.id.drawer_layout)
-
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, "Open navigation drawer", "Close navigation drawer")
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.open, R.string.close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -65,6 +76,22 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         navView.setupWithNavController(navController)
 
         navView.setNavigationItemSelectedListener(this)
+    }
+
+    private fun displayNotes() {
+        val listItems = findViewById<RecyclerView>(R.id.listItems)
+        listItems.layoutManager = noteLayoutManager
+        listItems.adapter = noteRecyclerAdapter
+        val nav_view = findViewById<NavigationView>(R.id.nav_view)
+        nav_view.menu.findItem(R.id.nav_notes).isChecked = true
+    }
+
+    private fun displayCourses() {
+        val listItems = findViewById<RecyclerView>(R.id.listItems)
+        listItems.layoutManager = courseLayoutManager
+        listItems.adapter = courseRecyclerAdapter
+        val nav_view = findViewById<NavigationView>(R.id.nav_view)
+        nav_view.menu.findItem(R.id.nav_courses).isChecked = true
     }
 
 //    private fun ActionBarDrawerToggle(itemsActivity: ItemsActivity, drawerLayout: DrawerLayout, toolbar: Toolbar, s: String, s1: String): ActionBarDrawerToggle {
@@ -92,10 +119,10 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         // Handle navigation view item clicks here
         when (item.itemId){
             R.id.nav_notes -> {
-                handleSelection("notes")
+                displayNotes()
             }
             R.id.nav_courses -> {
-                handleSelection("courses")
+                displayCourses()
             }
         }
         var drawer_layout: DrawerLayout = findViewById(R.id.drawer_layout)

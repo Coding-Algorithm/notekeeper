@@ -20,4 +20,7 @@
     <string name="menu_notes">Notes</string>
     <string name="menu_courses">Courses</string>
     <string name="menu_slideshow">Slideshow</string>
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>
