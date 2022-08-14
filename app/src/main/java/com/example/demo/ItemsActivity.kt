@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +42,10 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         CourseRecyclerAdapter(this, DataManager.courses.values.toList())
     }
 
+    private val viewModel by lazy {
+        ViewModelProviders.of(this)[ItemsActivityViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,7 +59,7 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
             startActivity(Intent(this, NoteActivity::class.java))
         }
 
-        displayNotes()
+        handleDisplaySelection(viewModel.navDrawerDisplaySelection)
 
         var drawer_layout: DrawerLayout = findViewById(R.id.drawer_layout)
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.open, R.string.close)
@@ -118,6 +123,20 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here
         when (item.itemId){
+            R.id.nav_notes,
+            R.id.nav_courses -> {
+                handleDisplaySelection(item.itemId)
+                viewModel.navDrawerDisplaySelection = item.itemId
+            }
+        }
+
+        var drawer_layout: DrawerLayout = findViewById(R.id.drawer_layout)
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    fun handleDisplaySelection(itemId: Int){
+        when(itemId){
             R.id.nav_notes -> {
                 displayNotes()
             }
@@ -125,9 +144,6 @@ class ItemsActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 displayCourses()
             }
         }
-        var drawer_layout: DrawerLayout = findViewById(R.id.drawer_layout)
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
     }
 
     private fun handleSelection(message: String) {
